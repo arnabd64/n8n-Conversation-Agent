@@ -1,3 +1,9 @@
+# uv
+.python-version
+uv.lock
+.env
+.chainlit/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
