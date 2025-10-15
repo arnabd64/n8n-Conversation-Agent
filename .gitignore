@@ -3,6 +3,7 @@
 uv.lock
 .env
 .chainlit/
+chainlit.md
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
