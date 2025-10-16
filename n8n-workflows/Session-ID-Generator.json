@@ -1,0 +1,149 @@
+{
+  "name": "Session-ID-Generator",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "0f053467-f084-4a3f-bef0-8e10e40ccc1f",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "92956f91-cdb2-43fe-9b25-198ddccf9156",
+      "name": "Webhook",
+      "webhookId": "0f053467-f084-4a3f-bef0-8e10e40ccc1f"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{ $json.sessionId }}",
+        "options": {
+          "responseCode": 201,
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "text/plain"
+              },
+              {
+                "name": "X-Workflow",
+                "value": "Session-ID"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        672,
+        0
+      ],
+      "id": "fa1a979d-de6a-48fc-b3e6-44f176cf9ca5",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "content": "## Session ID Creator\n\nA workflow to generate a UUIDv4 (Random UUID).\n\n *Example*: `a1b2c3d4-e5f6-47a8-b9c0-d1e2f3a4b5c6` ",
+        "height": 192,
+        "width": 272,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -16,
+        -224
+      ],
+      "typeVersion": 1,
+      "id": "83b25afd-2620-4ffc-92cc-08ee0949d334",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "action": "generate",
+        "dataPropertyName": "sessionId"
+      },
+      "type": "n8n-nodes-base.crypto",
+      "typeVersion": 1,
+      "position": [
+        240,
+        0
+      ],
+      "id": "981e532c-6405-4c3f-9264-9c286a1e19fc",
+      "name": "UUID Creator"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "94768f9c-f0e9-4016-a4a5-a3615f437fe1",
+              "name": "sessionId",
+              "value": "={{ $json.sessionId }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        448,
+        0
+      ],
+      "id": "fdbb5472-fbd8-4ee6-92e6-a8d3ce8507ba",
+      "name": "Filter"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "UUID Creator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "UUID Creator": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "90aac0c7-ce04-4ee5-8b47-170549a1837e",
+  "meta": {
+    "instanceId": "25f172f70b3f1ed2beae966e7095cab5e903b30db608a66afa3aab8db5fdeffe"
+  },
+  "id": "X6T96evbU4ZtU6Le",
+  "tags": []
+}

@@ -1,0 +1,94 @@
+{
+  "name": "Fetch-Chat-History",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "0c43b5fb-71e4-41d8-8c0d-f2b6436ee439",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -176,
+        -48
+      ],
+      "id": "fc15f2f4-9ee4-4dab-ae67-94719081cdb5",
+      "name": "Webhook",
+      "webhookId": "0c43b5fb-71e4-41d8-8c0d-f2b6436ee439"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "propertyName": "history",
+        "key": "={{ $json.query.sessionId }}",
+        "options": {
+          "dotNotation": true
+        }
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        32,
+        -48
+      ],
+      "id": "b89ae832-bce7-4fef-ab10-acfee59e25e4",
+      "name": "Redis",
+      "credentials": {
+        "redis": {
+          "id": "JoeSFh0XNj6bCjrc",
+          "name": "Local Redis"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        240,
+        -48
+      ],
+      "id": "a243a484-676a-435d-9e2e-67b86a14b783",
+      "name": "Respond to Webhook"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Redis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Redis": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "2ca83aa7-ffdb-4274-9df7-faf320af91dc",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "25f172f70b3f1ed2beae966e7095cab5e903b30db608a66afa3aab8db5fdeffe"
+  },
+  "id": "LN9nBr2y8k9RVKU9",
+  "tags": []
+}

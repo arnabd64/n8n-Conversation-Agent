@@ -1,0 +1,144 @@
+{
+  "name": "Backup-Chat-History",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "817ad0d1-60fb-403c-a5f1-c12c4b3a77b7",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "c3a9c6fb-8ec4-43ae-9d4b-64d4df9eae3c",
+      "name": "Webhook",
+      "webhookId": "817ad0d1-60fb-403c-a5f1-c12c4b3a77b7"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "cb178d99-3e02-4176-b9aa-ecc54e137c7c",
+              "name": "sessionId",
+              "value": "={{ $json.query.sessionId }}",
+              "type": "string"
+            },
+            {
+              "id": "d764245a-9e6b-4f03-8b87-ae830122d537",
+              "name": "history",
+              "value": "={{ $json.body.history }}",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        224,
+        0
+      ],
+      "id": "58e0445b-4215-4099-8efc-2772e90e49c9",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "collection": "chat_history",
+        "fields": "sessionId, history",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.2,
+      "position": [
+        448,
+        0
+      ],
+      "id": "3ef77666-bac6-44f6-9f80-f427feb06fe0",
+      "name": "Insert documents",
+      "credentials": {
+        "mongoDb": {
+          "id": "xpfiwPoBRYofY8gd",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{ $json.id }}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "text/plain"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        672,
+        0
+      ],
+      "id": "15f3fc1e-a7ac-4936-ba0b-402128764481",
+      "name": "Respond to Webhook"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Insert documents",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert documents": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "53ba46a0-6ea1-42be-af98-a2e8103aeae7",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "25f172f70b3f1ed2beae966e7095cab5e903b30db608a66afa3aab8db5fdeffe"
+  },
+  "id": "SQOnFiT4wzR1uUUd",
+  "tags": []
+}

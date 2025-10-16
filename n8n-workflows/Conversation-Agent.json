@@ -1,0 +1,175 @@
+{
+  "name": "Conversation-Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "You are a helpful assistant"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        384,
+        -240
+      ],
+      "id": "2bd1b8f3-7a44-4a7e-843f-aca33d5a162d",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "sessionTTL": 7200,
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryRedisChat",
+      "typeVersion": 1.5,
+      "position": [
+        528,
+        -16
+      ],
+      "id": "3cba6777-cbd1-48e7-ba5e-c3f395693d58",
+      "name": "Redis Chat Memory",
+      "credentials": {
+        "redis": {
+          "id": "JoeSFh0XNj6bCjrc",
+          "name": "Local Redis"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-oss-20b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        400,
+        -16
+      ],
+      "id": "8f75e810-52f1-4fdb-8067-35b2ec071b75",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "fY3MBfSsgkhixPDv",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "da803f5d-cfff-4f89-b846-7eb31e971aa1",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -64,
+        -240
+      ],
+      "id": "f05c09d2-8d3c-4d3d-a045-a20cd2fd8953",
+      "name": "Webhook",
+      "webhookId": "da803f5d-cfff-4f89-b846-7eb31e971aa1"
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        736,
+        -240
+      ],
+      "id": "fe35b9c2-a403-4256-bc86-eda2e9b05295",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={{ $json.body }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        160,
+        -240
+      ],
+      "id": "7d92cf4b-4353-40d5-b0cb-320d8e2d7fb2",
+      "name": "Edit Fields"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Redis Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "ad1fdb66-f267-4f0c-9867-d2479538ba01",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "25f172f70b3f1ed2beae966e7095cab5e903b30db608a66afa3aab8db5fdeffe"
+  },
+  "id": "MTgXEh0yroYqjaDu",
+  "tags": []
+}
