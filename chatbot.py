@@ -42,7 +42,7 @@ class Chatbot:
         inputs a new message in the chainlit application.
 
         Attributes:
-            - `message` (str) : User's Message
+            - `user_message` (str) : User's Message
 
         Returns:
             - `ai_message` (str) : LLM's Message
@@ -63,7 +63,7 @@ class Chatbot:
         session.
 
         Returns:
-            - `chat_history` (list) : Chat History for `session_id`
+            - `chat_history` (list) : Chat History for session_id
         """
         async with httpx.AsyncClient() as client:
             response = await client.get(
